@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open in DayTrip</title>
+<meta name="description" content="Open this link on your phone to add a friend on DayTrip.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #FAF8F4;
+    --surface: #FFFFFF;
+    --text: #1F1B16;
+    --muted: #6B6259;
+    --brand: #F46C2B;
+    --border: #E8E1D7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16130F;
+      --surface: #1F1B16;
+      --text: #F5F1EA;
+      --muted: #A79C8F;
+      --border: #322C24;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 400px; text-align: center; }
+  .brand { color: var(--brand); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
+  h1 { font-size: 26px; line-height: 1.25; margin: 0 0 10px; }
+  p { margin: 0 0 22px; color: var(--muted); }
+  .btn {
+    display: inline-block;
+    background: var(--brand);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 13px 28px;
+    border-radius: 14px;
+  }
+  .fineprint { margin-top: 28px; font-size: 13px; color: var(--muted); }
+  .fineprint a { color: var(--brand); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">DayTrip</div>
+  <h1 id="heading">Opening DayTrip…</h1>
+  <p id="message">If the app doesn't open automatically, tap below.</p>
+  <a id="open-btn" class="btn" href="#">Open DayTrip</a>
+  <p class="fineprint" id="fallback" hidden>
+    Don't have DayTrip yet? Ask the friend who sent you this link to add you
+    once you've installed it — <a href="mailto:hello@daytrip.app">hello@daytrip.app</a>
+    if you run into trouble.
+  </p>
+</main>
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  var heading = document.getElementById('heading');
+  var message = document.getElementById('message');
+  var openBtn = document.getElementById('open-btn');
+  var fallback = document.getElementById('fallback');
+
+  if (!code) {
+    heading.textContent = 'Invalid invite link';
+    message.textContent = 'This link is missing its invite code.';
+    openBtn.hidden = true;
+  } else {
+    var deepLink = 'daytrip://invite/' + encodeURIComponent(code);
+    openBtn.href = deepLink;
+    fallback.hidden = false;
+    // Give the OS a moment to hand off to the app before showing the fallback
+    // as the primary path; this fires regardless and is harmless if the app
+    // already took over navigation.
+    window.location.href = deepLink;
+  }
+</script>
+</body>
+</html>
